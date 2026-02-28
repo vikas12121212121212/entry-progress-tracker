@@ -117,7 +117,14 @@ WORKER_CONCURRENCY=3
 ### Start Services
 
 ```bash
-docker-compose up --build --scale worker=3
+# 1. Build all images
+docker compose build
+
+# 2. Start services in background (detached mode)
+docker compose up -d
+
+# 3. Scale worker service to 3 instances
+docker compose up -d --scale worker=3
 ```
 
 - Backend: http://localhost:5000
