@@ -1,0 +1,66 @@
+const entryModel = require("../models/model");
+const entryQueue = require("../queue/queue");
+const { v4: uuidv4 } = require("uuid");
+
+/**
+ * Create a new entry
+ */
+exports.createEntry = async (req, res) => {
+  const { title } = req.body;
+
+  if (!title || !title.trim()) {
+    return res.status(400).json({ error: "Title is required" });
+  }
+
+  const id = uuidv4(); // Generate UUID
+  const initialStatus = "CREATED";
+  const initialProgress = 0;
+
+  try {
+    // Save entry to DB
+    await entryModel.createEntry(id, title, initialStatus, initialProgress);
+
+    // Add job to the processing queue
+    await entryQueue.add("processEntry", { id });
+
+    // Return the created entry
+    res.status(201).json({
+      id,
+      title,
+      status: initialStatus,
+      progress: initialProgress,
+    });
+  } catch (err) {
+    console.error("Error creating entry:", err);
+    res.status(500).json({ error: "Failed to create entry" });
+  }
+};
+
+/**
+ * Get all entries
+ */
+exports.getEntries = async (req, res) => {
+  try {
+    const entries = await entryModel.getAllEntries();
+    res.json(entries);
+  } catch (err) {
+    console.error("Error fetching entries:", err);
+    res.status(500).json({ error: "Failed to fetch entries" });
+  }
+};
+
+/**
+ * Get a single entry by ID
+ */
+exports.getEntry = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const entry = await entryModel.getEntryById(id);
+    if (!entry) return res.status(404).json({ error: "Entry not found" });
+    res.json(entry);
+  } catch (err) {
+    console.error("Error fetching entry:", err);
+    res.status(500).json({ error: "Failed to fetch entry" });
+  }
+};
