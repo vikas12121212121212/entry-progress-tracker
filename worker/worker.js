@@ -74,13 +74,13 @@ new Worker(
 
     // Simulate progressive stages with 5-second delay
     await updateEntry(id, "PROCESSING", 20);
-    await sleep(15000);
+    await sleep(5000);
 
     await updateEntry(id, "STAGE_1_COMPLETE", 60);
-    await sleep(15000);
+    await sleep(5000);
 
     await updateEntry(id, "STAGE_2_COMPLETE", 80);
-    await sleep(15000);
+    await sleep(5000);
 
     await updateEntry(id, "COMPLETED", 100);
 

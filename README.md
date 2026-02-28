@@ -93,8 +93,8 @@ docker-compose up --build --scale worker=3
 ### Clone Repository
 
 ```bash
-git clone <your-repo-url>
-cd <repo-folder>
+git clone https://github.com/vikas12121212121212/entry-progress-tracker.git
+cd entry-progress-tracker
 ```
 
 ### Create Backend Environment Variables
@@ -111,7 +111,7 @@ PORT=5000
 DATABASE_URL=postgres://postgres:postgres@db:5432/entriesdb
 REDIS_HOST=redis
 REDIS_PORT=6379
-WORKER_CONCURRENCY=2
+WORKER_CONCURRENCY=3
 ```
 
 ### Start Services
